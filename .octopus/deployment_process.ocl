@@ -1,0 +1,50 @@
+step "hello-world-using-powershell" {
+    name = "Hello world (using PowerShell)"
+
+    action {
+        action_type = "Octopus.Script"
+        is_required = true
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                Write-Host 'Hello world, using PowerShell'
+                
+                #TODO: Experiment with steps of your own :)
+                
+                Write-Host '[Learn more about the types of steps available in Octopus](https://oc.to/OnboardingAddStepsLearnMore)'
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+    }
+}
+
+step "run-selenoid-app" {
+    name = "Run Selenoid App"
+    properties = {
+        Octopus.Action.TargetRoles = "App"
+    }
+
+    action {
+        action_type = "Octopus.DockerRun"
+        properties = {
+            Octopus.Action.Docker.Args = "--link selenoid"
+            Octopus.Action.Docker.EnvVariable = "{\"SELENOID_HOST\":\"selenoid\",\"BROWSER\":\"#{browser}\"}"
+            Octopus.Action.Docker.NetworkContainer = "selenoid"
+            Octopus.Action.Docker.NetworkType = "bridge"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "docker-hub"
+            Octopus.Action.Package.PackageId = "hieupham0607/selenoid-py"
+        }
+        worker_pool_variable = ""
+
+        packages {
+            acquisition_location = "Server"
+            feed = "docker-hub"
+            package_id = "hieupham0607/selenoid-py"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
