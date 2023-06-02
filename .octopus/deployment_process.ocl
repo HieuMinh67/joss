@@ -12,7 +12,7 @@ step "hello-world-using-powershell" {
                 #TODO: Experiment with steps of your own :)
                 
                 Write-Host '[Learn more about the types of steps available in Octopus](https://oc.to/OnboardingAddStepsLearnMore)'
-                    EOT
+                EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
@@ -46,5 +46,26 @@ step "run-selenoid-app" {
                 SelectionMode = "immediate"
             }
         }
+    }
+}
+
+step "slack-send-simple-notification" {
+    name = "Slack - Send Simple Notification"
+    properties = {
+        Octopus.Action.TargetRoles = "App"
+    }
+
+    action {
+        properties = {
+            Octopus.Action.RunOnServer = "false"
+            Octopus.Action.Template.Id = "ActionTemplates-21"
+            Octopus.Action.Template.Version = "15"
+            ssn_Channel = "lab"
+            ssn_Color = "good"
+            ssn_HookUrl = "#{My Sensitive Value (OK to Delete)}"
+            ssn_IconUrl = "https://octopus.com/content/resources/favicon.png"
+            ssn_Username = "Octopus Deploy"
+        }
+        worker_pool_variable = ""
     }
 }
