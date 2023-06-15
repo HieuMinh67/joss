@@ -64,6 +64,8 @@ step "slack-send-simple-notification" {
             ssn_Color = "good"
             ssn_HookUrl = "#{My Sensitive Value (OK to Delete)}"
             ssn_IconUrl = "https://octopus.com/content/resources/favicon.png"
+            ssn_Message = "deploy release #{Octopus.Release.Number}"
+            ssn_Title = "*Octopus Deploy*"
             ssn_Username = "Octopus Deploy"
         }
         worker_pool_variable = ""
